@@ -76,5 +76,7 @@ export const getCurrentUser = async () => {
         return currentUser.documents[0];
     } catch (error) {
         console.log(error);
+
+        throw error;
     }
 }
