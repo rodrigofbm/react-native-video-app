@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { Alert, FlatList, Image, RefreshControl, Text, View } from 'react-native'
+import React, { useState } from 'react'
+import { FlatList, Image, RefreshControl, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import SearchInput from '@/components/SearchInput'
 import Trending from '@/components/Trending'
 import EmptyState from "@/components/EmptyState";
+import VideoCard from "@/components/VideoCard";
 import useAppwrite from "@/hooks/useAppwrite";
 import { getAllPosts } from "@/lib/appwrite";
 import { images } from '@/constants'
@@ -31,7 +32,7 @@ const Home = () => {
         keyExtractor={(item) => item.$id.toString()}
 
         renderItem={({item}) => (
-          <Text className="text-3xl text-white">{item.title}</Text>
+          <VideoCard video={item} />
         )}
 
         ListHeaderComponent={() => (
