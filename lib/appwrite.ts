@@ -80,3 +80,12 @@ export const getCurrentUser = async () => {
         throw error;
     }
 }
+
+export const getAllPosts = async () => {
+    try {
+        const posts = await databases.listDocuments(config.databaseId, config.videoCollectionId)
+        return posts.documents;
+    } catch (e) {
+        throw e;
+    }
+}
