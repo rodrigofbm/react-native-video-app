@@ -89,3 +89,14 @@ export const getAllPosts = async () => {
         throw e;
     }
 }
+
+export const getLatestPosts = async () => {
+    try {
+        const query = [Query.orderDesc('$createdAt'), Query.limit(7)];
+        const posts = await databases
+            .listDocuments(config.databaseId, config.videoCollectionId, query)
+        return posts.documents;
+    } catch (e) {
+        throw e;
+    }
+}
