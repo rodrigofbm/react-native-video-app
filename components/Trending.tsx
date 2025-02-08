@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
-import {Text, FlatList, TouchableOpacity, ImageBackground, Image} from 'react-native'
+import {FlatList, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
+import {useVideoPlayer, VideoView} from "expo-video";
 import * as Animatable from 'react-native-animatable'
 import {icons} from "@/constants";
 
@@ -12,12 +13,15 @@ const zoomOut = {
     0: { scale: 1.0 },
     1: { scale: 0.9 },
 }
+const videoSource =
+    'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
 
 const TrendingItem = ({activeItem, item}) => {
     const [play, setPlay] = useState(false)
-
+    const player = useVideoPlayer(videoSource, (player) => {
+        player.showNowPlayingNotification = true;
+    });
     return  (
-
         <Animatable.View
             className="mr-5"
             animation={activeItem === item.$id ? zoomIn : zoomOut}
@@ -25,13 +29,27 @@ const TrendingItem = ({activeItem, item}) => {
         >
             {
                 play ? (
-                    <Text className="text-white">Playing</Text>
+                    <View
+                        className="w-52 h-72 rounded-[35px] mt-3 bg-white/10"
+                        style={styles.contentContainer}
+                    >
+                        <VideoView
+                            style={{width: '100%', height: '100%'}}
+                            player={player}
+                            allowsFullscreen
+                            allowsPictureInPicture
+                            nativeControls
+                        />
+                    </View>
                 ) :
                 (
                     <TouchableOpacity
                         className="relative justify-center items-center"
                         activeOpacity={0.7}
-                        onPress={() => setPlay(true)}
+                        onPress={() => {
+                            setPlay(true);
+                            player.play()
+                        }}
                     >
                         <ImageBackground
                             className="w-52 h-72 rounded-[32px] my-5 overflow-hidden shadow-lg shadow-black/40"
@@ -67,6 +85,7 @@ const Trending = ({ posts }: Props) => {
     return (
     <FlatList 
         horizontal
+        showsHorizontalScrollIndicator={false}
         data={posts}
         keyExtractor={(item) => item.$id}
         onViewableItemsChanged={viewableItemsChanged}
@@ -83,3 +102,11 @@ const Trending = ({ posts }: Props) => {
 }
 
 export default Trending
+
+const styles = StyleSheet.create({
+    contentContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
+});
