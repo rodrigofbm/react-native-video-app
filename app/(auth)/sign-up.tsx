@@ -1,16 +1,19 @@
 import { Alert, Image, ScrollView, Text, View } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { images } from '@/constants'
+import { Link, router } from 'expo-router'
+
 import FormField from '@/components/FormField'
 import CustomButton from '@/components/CustomButton'
-import { Link, router } from 'expo-router'
-import { createUser } from '@/lib/appwrite'
+import {createUser, getCurrentUser} from '@/lib/appwrite'
+import {useGlobalContext} from "@/context/GlobalProvider";
+import { images } from '@/constants'
 
 
 const SignUp = () => {
   const [form, setForm] = React.useState({username: '', email: '', password: ''});
   const [isLoading, setIsLoading] = React.useState(false)
+  const { setIsLogged, setUser } = useGlobalContext();
 
   const submit = async () => {
     if(!form.username || !form.email || !form.password) Alert.alert('Error','All fields are required');
@@ -20,7 +23,10 @@ const SignUp = () => {
     try {
       const result = await createUser(form.email, form.password, form.username);
 
-      //set it to global state
+      const user = await getCurrentUser();
+
+      setUser(user);
+      setIsLogged(true);
 
       router.push('/home');
     } catch (error: any) {

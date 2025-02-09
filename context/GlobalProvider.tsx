@@ -15,7 +15,7 @@ interface GlobalContextType {
   isLoading: boolean;
   setIsLoading: (value: boolean) => void;
   setIsLogged: (value: boolean) => void;
-  setUser: (user: User | null) => void;
+  setUser: (user: User | any | null) => void;
 }
 
 const GlobalContext = createContext<GlobalContextType | null>(null);
