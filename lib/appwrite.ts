@@ -100,3 +100,14 @@ export const getLatestPosts = async () => {
         throw e;
     }
 }
+
+export const searchPosts = async (search: string) => {
+    try {
+        const query = [Query.search('title', search)];
+        const posts = await databases
+            .listDocuments(config.databaseId, config.videoCollectionId, query)
+        return posts.documents;
+    } catch (e) {
+        throw e;
+    }
+}

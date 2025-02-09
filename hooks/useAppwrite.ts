@@ -6,10 +6,8 @@ const useAppwrite = (fn: () => Promise<any> ) => {
     const [isLoading, setIsLoading] = useState(true)
 
     const fetchData = async () => {
-
         try {
-            const response = await fn()
-            setData(response);
+            setData(await fn());
         } catch (e: any) {
             Alert.alert('Error', e.message)
         } finally {
